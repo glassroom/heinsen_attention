@@ -4,7 +4,7 @@ Proof-of-concept implementation of "[Softmax Attention with Constant Cost per To
 
 We propose a simple modification to the conventional attention mechanism applied by Transformers: Instead of quantifying pairwise query-key similarity with scaled dot-products, we quantify it with the logarithms of scaled dot-products of exponentials:
 
-$\overset{\text{modified}}{\text{Attention}}(Q, K, V) := \displaystyle \text{\Softmax}\left( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} \right) V.$
+$\overset{\text{modified}}{\text{Attention}}(Q, K, V) := \displaystyle \text{Softmax}\left( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} \right) V.$
 
 With this simple modification, attention becomes expressible as a composition of log-sums of exponentials that is linearizable, with a latent space of constant size, enabling sequential application with constant time and space complexity per token.
 
@@ -52,7 +52,7 @@ V = torch.exp(log_V)
 
 ### Compute Causal Attention with Quadratic Cost
 
-Here is a PyTorch module that computes $\Softmax\left( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} \right) V$, using $c = c_1 + c_2$ as the scaling constant, where $c_1 = \max(Q)$ and $c_2 = \max(K)$:
+Here is a PyTorch module that computes $\text{Softmax}\left( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} \right) V$, using $c = c_1 + c_2$ as the scaling constant, where $c_1 = \max(Q)$ and $c_2 = \max(K)$:
 
 ```python
 class QuadraticCostCausalAttention(nn.Module):
