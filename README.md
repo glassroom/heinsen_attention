@@ -52,7 +52,7 @@ V = torch.exp(log_V)
 
 ### Compute Causal Attention with Quadratic Cost
 
-Here is a PyTorch module that computes $\text{Softmax}\left( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} \right) V$, using $c = c_1 + c_2$ as the scaling constant, where $c_1 = \max(Q)$ and $c_2 = \max(K)$:
+Here is a PyTorch module that computes $\text{Softmax} ( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} ) V$, using $c = c_1 + c_2$ as the scaling constant, where $c_1 = \max(Q)$ and $c_2 = \max(K)$:
 
 ```python
 class QuadraticCostCausalAttention(nn.Module):
@@ -213,7 +213,7 @@ Neither limitation is intrinsic to our attention mechanism. Both can be resolved
 
 ## Replicating Published Results
 
-The generative language model we use in our experiment is defined in the file [heinsen_language_model.py](heinsen_language_model.py). To replicate our results, train the model on 300B tokens from The Pile ([Gao et al, 2020](https://arxiv.org/abs/2101.00027)) with a conventional training setup (_e.g._, you can use [Karpathy's training script for nanoGPT2](https://github.com/karpathy/nanoGPT/blob/master/train.py) with minimal modifications). For tokenization, we use [tiktoken](https://github.com/openai/tiktoken) with the 'gpt2' vocabulary. We would recommend at least an 8XA100 40GB for training hardware.
+The generative language model we use in our experiment is defined in the file [generative_language_model.py](generative_language_model.py). To replicate our results, train the model on 300B tokens from The Pile ([Gao et al, 2020](https://arxiv.org/abs/2101.00027)) with a conventional training setup (_e.g._, you can use [Karpathy's training script for nanoGPT2](https://github.com/karpathy/nanoGPT/blob/master/train.py) with minimal modifications). For tokenization, we use [tiktoken](https://github.com/openai/tiktoken) with the 'gpt2' vocabulary. We would recommend at least an 8XA100 40GB for training hardware.
 
     
 ## Notes
