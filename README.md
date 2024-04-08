@@ -1,6 +1,6 @@
 # heinsen_attention
 
-Proof-of-concept implementation of "[Softmax Attention with Constant Cost per Token](assets/preprint.pdf)" (Heinsen, 2024).
+Reference implementation of "[Softmax Attention with Constant Cost per Token](assets/preprint.pdf)" (Heinsen, 2024), (arXiv link pending).
 
 We propose a simple modification to the conventional attention mechanism applied by Transformers: Instead of quantifying pairwise query-key similarity with scaled dot-products, we quantify it with the logarithms of scaled dot-products of exponentials:
 
@@ -12,7 +12,7 @@ where $c$ is a scaling constant. With this simple modification, attention become
 
 * [How Does it Work?](#how-does-it-work)
 
-* [Installation and Usage](#installation-and-requirements)
+* [Installation and Usage](#installation-and-usage)
 
 * [Replicating Published Results](#replicating-published-results)
 
@@ -25,7 +25,7 @@ where $c$ is a scaling constant. With this simple modification, attention become
 
 It's best to _see it in action_ with a toy example. First, we will show how to compute causal (autoregressive) attention with our modification using the familiar quadratic-cost formulation. Then, we will show how to linearize computation, obtaining the same results. Finally, we will split the sequence in chunks and compute attention sequentially, chunk by chunk, incurring constant cost per token, again obtaining the same results. 
 
-### Toy Example
+### Our Toy Example
 
 Import all dependencies:
 
@@ -35,7 +35,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 ```
 
-For simplicity, in our toy example we are going to limit the values $V$ to positive numbers, to avoid having to manipulate floating-point numbers, which are not uniformly well-supported in PyTorch.
+For simplicity, we are going to limit the values $V$ to positive numbers, to avoid having to manipulate floating-point numbers, which are not uniformly well-supported in PyTorch.
 
 ```python
 # Setup for our toy example:
@@ -50,9 +50,13 @@ log_V = torch.randn(n_tok, d_val)
 V = torch.exp(log_V)
 ```
 
-### Compute Causal Attention with Quadratic Cost
+### First, Causal Attention with Quadratic Cost
 
-Here is a PyTorch module that computes $\text{Softmax} ( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} ) V$, using $c = c_1 + c_2$ as the scaling constant, where $c_1 = \max(Q)$ and $c_2 = \max(K)$:
+Here is a PyTorch module that computes our attention mechanism with its quadratic-cost formulation,
+
+$$\text{Softmax} \left( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} \right) V,$$
+
+using $c = c_1 + c_2$ as the scaling constant, with $c_1 = \max(Q)$ and $c_2 = \max(K)$:
 
 ```python
 class QuadraticCostCausalAttention(nn.Module):
@@ -77,7 +81,7 @@ Y1 = quadratic_attn(Q, K, V)
 print(Y1)
 ```
 
-### Linearized Casual Attention
+### Second, Linearized Casual Attention
 
 Here is a PyTorch module that computes the same output, using a linearized formulation. Note that the module accepts `log_V` instead of `V` as an input:
 
@@ -111,7 +115,7 @@ You can confirm the results are the same as with the quadratic formulation:
 print('Do Y1 and Y2 match?', torch.allclose(Y1, Y2))
 ```
 
-### Sequential Casual Attention with Constant Cost per Token
+### Third, Sequential Casual Attention with Constant Cost per Token
 
 We now sequentialize the computation by caching our attention mechanism's latent state, which has a constant size, enabling us to apply attention over a stream of tokens that arrive in chunks, with constant cost per token:
 
@@ -196,7 +200,7 @@ from heinsen_attention import LogAttention
 log_attn = LogAttention(is_causal=True)
 
 # Compute log(Attention(...)):
-log_Y = log_attn(Q, K, log_V)
+log_Y = log_attn(Q, K, log_V)  # in practice, we can use log_Y
 ```
 If you want to obtain attention in the same space as `V`, exponentiate: `Y = log_Y.exp()`.
 
@@ -204,7 +208,7 @@ If you want to obtain attention in the same space as `V`, exponentiate: `Y = log
 
 Our implementation is a _proof of concept_. For simplicity and expediency, we limit it in two significant ways:
 
-1. As in our toy example, we restrict values ($V$) to positive numbers, to avoid dealing with complex floating-point numbers, which incur greater overhead and presently are more cumbersome to manipulate than real floating-point numbers. In practice, we have found this isn't an issue.
+1. As in our toy example, we restrict values ($V$) to positive numbers, to avoid dealing with complex floating-point numbers, which incur greater overhead and presently are more cumbersome to manipulate than real floating-point numbers. In practice, we have found this isn't an issue: We work with the logarithm of attention, which is in the same space as $\log V$.
 
 2. When computing autoregressive attention in parallel over all tokens in a sequence, we first compute all latent states with two parallel scans (`logcumsumexp`'s), keeping all latent states simultaneously in memory as intermediate values, and then reduce them, which is memory-inefficient but easier to write than a memory-efficient implementation. In practice, this impacts the amount of memory required for training.
 
@@ -213,7 +217,7 @@ Neither limitation is intrinsic to our attention mechanism. Both can be resolved
 
 ## Replicating Published Results
 
-The generative language model we use in our experiment is defined in the file [generative_language_model.py](generative_language_model.py). To replicate our results, train the model on 300B tokens from The Pile ([Gao et al, 2020](https://arxiv.org/abs/2101.00027)) with a conventional training setup (_e.g._, you can use [Karpathy's training script for nanoGPT2](https://github.com/karpathy/nanoGPT/blob/master/train.py) with minimal modifications). For tokenization, we use [tiktoken](https://github.com/openai/tiktoken) with the 'gpt2' vocabulary. We would recommend at least an 8XA100 40GB for training hardware.
+The generative language model we use in our experiments is defined in the file [generative_language_model.py](generative_language_model.py). To replicate our results, train the model on 300B tokens from The Pile ([Gao et al, 2020](https://arxiv.org/abs/2101.00027)) using a conventional setup: one-cycle lr schedule with warm-up, max lr 6e-4, min lr 6e-5 (e.g., you could use [this training script by Andrej Karpathy](https://github.com/karpathy/nanoGPT/blob/master/train.py) with minor modifications). For tokenization, we use [tiktoken](https://github.com/openai/tiktoken) with the 'gpt2' vocabulary. We would recommend at least an 8XA100 40GB for training hardware.
 
     
 ## Notes
