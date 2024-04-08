@@ -158,12 +158,12 @@ sequential_attn = SequentialCausalAttention()
 # Compute attention over the first chunk:
 chunk = next(chunks)
 print('Processing a chunk with {} tokens.'.format(chunk[0].size(-2)))
-Y3 = [attn3(*chunk)]  # saves latent state
+Y3 = [sequential_attn(*chunk)]  # saves latent state
 
 # Compute attention over remaining chunks, using prev context for each one:
 for chunk in chunks:
     print('Processing a chunk with {} tokens.'.format(chunk[0].size(-2)))
-    Y3.append(attn3(*chunk, using_prev_context=True))
+    Y3.append(sequential_attn(*chunk, using_prev_context=True))
 
 Y3 = torch.cat(Y3, dim=-2)
 print(Y3)
