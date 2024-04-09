@@ -81,7 +81,7 @@ Y1 = quadratic_attn(Q, K, V)
 print(Y1)
 ```
 
-### Second, Linearized Casual Attention
+### Second, Linearized Causal Attention
 
 Here is a PyTorch module that computes the same output, using a linearized formulation. Note that the module accepts `log_V` instead of `V` as an input:
 
@@ -115,7 +115,7 @@ You can confirm the results are the same as with the quadratic formulation:
 print('Do Y1 and Y2 match?', torch.allclose(Y1, Y2))
 ```
 
-### Third, Sequential Casual Attention with Constant Cost per Token
+### Third, Sequential Causal Attention with Constant Cost per Token
 
 We now sequentialize the computation by caching our attention mechanism's latent state, which has a constant size, enabling us to apply attention over a stream of tokens that arrive in chunks, with constant cost per token:
 
