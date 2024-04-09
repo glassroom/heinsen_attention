@@ -206,7 +206,9 @@ $$\begin{aligned}
     & = \text{LSE} ( \mathbf{q} + \mathbf{k} ), \\
 \end{aligned}$$
 
-where $\text{LSE}$ is shorthand for "Logarithm of a Sum of Exponentials." Armed with this insight, we prove that our attention mechanism is expressible as a composition of log-sums of exponentials that is linearizable, with a latent space of constant size, enabling sequential application with constant time and space complexity per token. For details, please see our paper.
+where $\text{LSE}$ is shorthand for "Logarithm of a Sum of Exponentials."
+
+Armed with this insight, we prove that our attention mechanism is expressible as a composition of log-sums of exponentials that is linearizable, with a latent space of constant size, enabling sequential application with constant time and space complexity per token. For details, please see our paper.
 
     
 ## Installation and Usage
