@@ -249,7 +249,23 @@ Neither limitation is intrinsic to our attention mechanism. Both can be resolved
 
 ## Replicating Published Results
 
-The generative language model we use in our experiments is defined [here](generative_language_model.py). To replicate our results, train the model on 300B tokens from The Pile ([Gao et al, 2020](https://arxiv.org/abs/2101.00027)) using a conventional setup: one-cycle lr schedule with warm-up, max lr 6e-4, min lr 6e-5 (e.g., you could use [this training script](https://github.com/karpathy/nanoGPT/blob/master/train.py) by Andrej Karpathy with minor modifications). For tokenization, we use [tiktoken](https://github.com/openai/tiktoken) with the 'gpt2' vocabulary. For training hardware, we would recommend at least an 8XA100 40GB.
+The generative language model we use in our experiments is defined [here](generative_language_model.py). Build the model with:
+
+```python
+from generative_language_model import build_model
+model = build_model()
+```
+
+To replicate our results, train the model on 300B tokens from The Pile ([Gao et al, 2020](https://arxiv.org/abs/2101.00027)) using a conventional setup: AdamW optimizer with weight decay 1e-1 and betas (0.90, 0.95), one-cycle lr schedule with short warm-up, max lr 6e-4, min lr 6e-5 (e.g., you could use [this training script](https://github.com/karpathy/nanoGPT/blob/master/train.py) by Andrej Karpathy with minor modifications). For convenience, the model splits its parameters into groups with and without weight decay:
+
+```python
+param_groups = model.get_param_groups(self, weight_decay=1e-1)
+optimizer = torch.optim.AdamW(param_groups)
+```
+
+For tokenization, we use [tiktoken](https://github.com/openai/tiktoken) with the 'gpt2' vocabulary.
+
+For training hardware, we would recommend at least an 8XA100 40GB.
 
     
 ## Notes
