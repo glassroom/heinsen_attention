@@ -11,7 +11,7 @@ class LogAttention(nn.Module):
         log_V: [..., n_tok, d_val] log-values.
 
     Output shapes:
-        log_attention: [..., n, d_val] log of Softmax mixtures of values.
+        log_attention: [..., n_tok, d_val] log of Softmax mixtures of values.
     """
 
     def __init__(self, is_causal=True):
