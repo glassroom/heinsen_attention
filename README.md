@@ -192,16 +192,16 @@ At each step, the above module is computing attention over all tokens in the inp
 
 Take a single query vector $\mathbf{q}$ and a single key vector $\mathbf{k}$ in $\mathbb{R}^{d}$.
 
-$$\mathbf{q} = \begin{bmatrix} q_1 \\ q_2 \\ \vdots \\ q_d \end{bmatrix}, \; \mathbf{k} = \begin{bmatrix} k_1 \\ k_2 \\ \vdots \\ k_d \end{bmatrix}.$$
+$$\mathbf{q} = \begin{bmatrix} q_1 \\\ q_2 \\\ \vdots \\\ q_d \end{bmatrix}, \; \mathbf{k} = \begin{bmatrix} k_1 \\\ k_2 \\\ \vdots \\\ k_d \end{bmatrix}.$$
 
 The logarithm of the dot-product $\langle \cdot, \cdot, \rangle$ of their exponentials is:
 
 $$\begin{aligned}
     \log \langle \exp(\mathbf{q}), \exp(\mathbf{k}) \rangle
     & = \log ( e^{q_1} e^{k_1} + e^{q_2} e^{k_2} + \dots + e^{q_d} e^{k_d} ) \\
-    & = \log \sum \left( \begin{bmatrix} e^{q_1} \\ e^{q_2} \\ \vdots \\ e_{q^d} \end{bmatrix} \odot \begin{bmatrix} e^{k_1} \\ e_{k^2} \\ \vdots \\ e_{k^d} \end{bmatrix} \right) \\
-    & = \log \sum \left( \begin{bmatrix} e^{q_1} e^{k_1} \\ e^{q_2} e^{k_2} \\ \vdots \\ e^{q_d} e^{k_d} \end{bmatrix} \right) \\
-    & = \log \sum \left( \begin{bmatrix} e^{q_1 + k_1} \\ e^{q_2 + k_2} \\ \vdots \\ e^{q_d + k_d} \end{bmatrix} \right) \\
+    & = \log \sum \left( \begin{bmatrix} e^{q_1} \\\ e^{q_2} \\\ \vdots \\\ e_{q^d} \end{bmatrix} \odot \begin{bmatrix} e^{k_1} \\\ e_{k^2} \\\ \vdots \\\ e_{k^d} \end{bmatrix} \right) \\
+    & = \log \sum \left( \begin{bmatrix} e^{q_1} e^{k_1} \\\ e^{q_2} e^{k_2} \\\ \vdots \\\ e^{q_d} e^{k_d} \end{bmatrix} \right) \\
+    & = \log \sum \left( \begin{bmatrix} e^{q_1 + k_1} \\\ e^{q_2 + k_2} \\\ \vdots \\\ e^{q_d + k_d} \end{bmatrix} \right) \\
     & = \log\sum\exp ( \mathbf{q} + \mathbf{k} ) \\
     & = \text{LSE} ( \mathbf{q} + \mathbf{k} ), \\
 \end{aligned}$$
