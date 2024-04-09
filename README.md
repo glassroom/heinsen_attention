@@ -35,7 +35,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 ```
 
-For simplicity, we are going to limit the values $V$ to positive numbers, to avoid having to manipulate floating-point numbers, which are not uniformly well-supported in PyTorch.
+For simplicity, we are going to limit the values $V$ to positive numbers, to avoid having to manipulate complex floating-point numbers, which are not uniformly well-supported in PyTorch.
 
 ```python
 # Setup for our toy example:
