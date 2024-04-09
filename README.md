@@ -72,7 +72,7 @@ class QuadraticCostCausalAttention(nn.Module):
         sims = torch.log((Q - c1).exp() @ (K - c2).exp().transpose(-2, -1))  # [n_tok, n_tok]
         mask = sims.new_ones(sims.shape[-2:], dtype=torch.bool).tril()       # [n_tok, n_tok]
         sims = sims.masked_fill(mask.logical_not(), float('-inf'))           # [n_tok, n_tok]
-        Y = F.softmax(sims, dim=-1) @ V                                      # [n_tok, d_val]  eq. (1) in paper
+        Y = F.softmax(sims, dim=-1) @ V                                      # [n_tok, d_val]
         return Y
 ```
 
@@ -97,10 +97,13 @@ class LinearizedCausalAttention(nn.Module):
 
     def forward(self, Q, K, log_V):
         Q, K, log_V = (Q.unsqueeze(-1), K.unsqueeze(-1), log_V.unsqueeze(-2))
+
         H_S = torch.logcumsumexp(K + log_V, dim=-3)  # [n_tok, d_key, d_val]  eq. (6) in paper
         H_Z = torch.logcumsumexp(K        , dim=-3)  # [n_tok, d_key, 1]      eq. (6)
+
         log_S = torch.logsumexp(Q + H_S, dim=-2)     # [n_tok, d_val]         eq. (5)
         log_Z = torch.logsumexp(Q + H_Z, dim=-2)     # [n_tok, d_val]         eq. (5)
+
         Y = torch.exp(log_S - log_Z)                 # [n_tok, d_val]         eq. (2)
         return Y
 ```
