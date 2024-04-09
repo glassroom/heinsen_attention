@@ -37,7 +37,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 ```
 
-Now, let's set up our toy example. Our method requires computing the logarithm of the values, $V$. If $V$ has any negative values, its logarithm is complex. Complex floating-point numbers are not uniformly well-supported in PyTorch. To avoid having to deal with them in our toy example, we limit $V$'s elements to positive numbers. Also, we keep the number of tokens, key features, and value features tiny so the results can fit on a single screen when we print them:
+Now, let's create toy queries `Q`, keys `K`, and values `V`. Our method requires computing the logarithm of `V`. If there are any negative values in `V`, their logarithms will be complex numbers, which are not uniformly well-supported in PyTorch. To avoid having to deal with them in our toy example, we will limit `V`'s elements to positive numbers. Also, we will keep the number of tokens `n_tok`, key features `d_key`, and value features `d_val` tiny so that when we print results, they can fit on a single screen:
 
 ```python
 # Setup for our toy example:
