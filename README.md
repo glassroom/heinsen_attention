@@ -227,7 +227,7 @@ $$\overset{\text{modified}}{\text{Attention}}(Q, K, V) := \displaystyle \text{So
 
 The question is whether there are other functions $\phi$ that are not $\exp$ (and do not exponentiate) which (a) are invertible, and (b) enable linearization of the Softmax function. We suspect the answer is no.
 
-It might be possible to replace $\exp$ and $\log$ with two functions $\phi: \mathbb{R} \mapsto \mathbb{R}_+$ and $\psi: \mathbb{R}_+ \mapsto \mathbb{R}$ that are not each other's inverses and together enable linearization of the Softmax function, but the result might not be... as elegant.
+It might be possible to replace $\exp$ and $\log$ with two functions that are not each other's inverses and together enable linearization of the Softmax function, but the result might not be... as elegant.
 
 
 *Q: "Is this method a special case of ``linear attention'' as proposed by [Katharopoulos et al (2020)](https://arxiv.org/abs/2006.16236)?"*
