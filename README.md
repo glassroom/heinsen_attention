@@ -255,9 +255,9 @@ Neither limitation is intrinsic to our attention mechanism. Both can be resolved
 
 ## Frequently Asked Questions
 
-*Q: "Can this be generalized to functions other than $\exp(\cdot)$ and $\log(\cdot)$?"*
+*Q: "Can this be generalized to functions other than _exp()_ and _log()_?"*
 
-A: Yes, _obviously_. If we define $\phi = \exp$, we have:
+A: Yes, obviously. If we define $\phi = \exp$, we have:
 
 $$\overset{\text{modified}}{\text{Attention}}(Q, K, V) := \displaystyle \text{Softmax}\left( \phi^{-1} \left( \frac{\phi(Q) \phi(K)^T}{\phi(c)} \right) \right) V.$$
 
