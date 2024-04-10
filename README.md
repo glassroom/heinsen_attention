@@ -217,6 +217,21 @@ where $\text{LSE}$ is shorthand for "Logarithm of a Sum of Exponentials."
 Armed with this insight, we prove that our attention mechanism is expressible as a composition of log-sums of exponentials that is linearizable, with a latent space of constant size, enabling sequential application with constant time and space complexity per token. For details, please see our paper.
 
 
+## Frequently Asked Questions
+
+*Q: "Can this be generalized to functions other than _exp()_ and _log()_?"*
+
+A: Yes, obviously. If we define $\phi = \exp$, we have:
+
+$$\overset{\text{modified}}{\text{Attention}}(Q, K, V) := \displaystyle \text{Softmax}\left( \phi^{-1} \left( \frac{\phi(Q) \phi(K)^T}{\phi(c)} \right) \right) V.$$
+
+The question is whether there are other functions $\phi$ that are not $\exp$ (and do not exponentiate) which (a) are invertible, and (b) enable linearization of the Softmax function. We suspect the answer is no.
+
+*Q: "Is this method a special case of ``linear attention'' as proposed by [Katharopoulos et al (2020)](https://arxiv.org/abs/2006.16236)?"*
+
+A: No. As far as we know, all previous attempts to linearize attention, including the method proposed by Katharopoulos et al, do _not_ apply an inverse function to the kernelized matrix product and do _not_ apply the Softmax function to the logits. We cite the work by Katharopoulos et al in our paper.
+
+
 ## Installation and Usage
 
 Download or copy a single file to your project directory: [heinsen_attention.py](heinsen_attention.py).
@@ -251,21 +266,6 @@ Our implementation is a _proof of concept_. For simplicity and expediency, we li
 2. When computing autoregressive attention in parallel over all tokens in a sequence, we first compute all latent states with two parallel scans (`logcumsumexp`'s), keeping all latent states simultaneously in memory as intermediate values, and then reduce them, which is memory-inefficient but easier to write than a memory-efficient implementation. In practice, this impacts the amount of memory required for training.
 
 Neither limitation is intrinsic to our attention mechanism. Both can be resolved with code.
-
-
-## Frequently Asked Questions
-
-*Q: "Can this be generalized to functions other than _exp()_ and _log()_?"*
-
-A: Yes, obviously. If we define $\phi = \exp$, we have:
-
-$$\overset{\text{modified}}{\text{Attention}}(Q, K, V) := \displaystyle \text{Softmax}\left( \phi^{-1} \left( \frac{\phi(Q) \phi(K)^T}{\phi(c)} \right) \right) V.$$
-
-The question is whether there are other functions $\phi$ that are not $\exp$ (and do not exponentiate) which (a) are invertible, and (b) enable linearization of the Softmax function. We suspect the answer is no.
-
-*Q: "Is this method a special case of ``linear attention'' as proposed by [Katharopoulos et al (2020)](https://arxiv.org/abs/2006.16236)?"*
-
-A: No. As far as we know, all previous attempts to linearize attention, including the method proposed by Katharopoulos et al, do _not_ apply an inverse function to the kernelized matrix product and do _not_ apply the Softmax function to the logits. We cite the work by Katharopoulos et al in our paper.
 
 
 ## Replicating Published Results
