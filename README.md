@@ -2,11 +2,11 @@
 
 Reference implementation of "[Softmax Attention with Constant Cost per Token](http://arxiv.org/abs/2404.05843)" (Heinsen, 2024).
 
-We propose a simple modification to the conventional attention mechanism applied by Transformers: Instead of quantifying pairwise query-key similarity with scaled dot-products, we quantify it with the logarithms of scaled dot-products of exponentials:
+We propose a simple modification to the conventional Softmax attention mechanism applied by Transformers: Instead of quantifying pairwise query-key similarity with scaled dot-products, we quantify it with the logarithms of scaled dot-products of exponentials:
 
 $$\overset{\text{modified}}{\text{Attention}}(Q, K, V) := \displaystyle \text{Softmax}\left( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} \right) V,$$
 
-where $c$ is a scaling constant. With this simple modification, attention becomes expressible as a composition of log-sums of exponentials that is linearizable, with a latent space of constant size, enabling sequential application with constant time and space complexity per token.
+where $c$ is a scaling constant. With this simple modification, Softmax attention becomes expressible as a composition of log-sums of exponentials that is linearizable, with a latent space of constant size, enabling sequential application with constant time and space complexity per token.
 
 
 ## Table of Contents
@@ -26,7 +26,7 @@ where $c$ is a scaling constant. With this simple modification, attention become
 
 ## How Does it Work?
 
-It's best to _see it in action_ with a toy example. First, we will show how to compute causal (autoregressive) attention with our modification using the familiar quadratic-cost formulation. Then, we will show how to linearize computation, obtaining the same results. Finally, we will split the sequence in chunks and compute attention sequentially, chunk by chunk, incurring constant cost per token, again obtaining the same results. 
+It's best to _see it in action_ with a toy example. First, we will show how to compute causal (autoregressive) Softmax attention with our modification using the familiar quadratic-cost formulation. Then, we will show how to linearize computation, obtaining the same results. Finally, we will split the sequence in chunks and compute attention sequentially, chunk by chunk, incurring constant cost per token, again obtaining the same results. 
 
 
 ### Our Toy Example
@@ -55,7 +55,7 @@ V = torch.exp(log_V)               # positive only
 ```
 
 
-### First, Causal Attention with Quadratic Cost
+### First, Causal Softmax Attention with Quadratic Cost
 
 Here is a PyTorch module that computes our attention mechanism with its quadratic-cost formulation,
 
@@ -87,7 +87,7 @@ print(Y1)
 ```
 
 
-### Second, Linearized Causal Attention
+### Second, Linearized Causal Softmax Attention
 
 Here is a PyTorch module that computes the same output, using a linearized formulation. Note that the module accepts `log_V` instead of `V` as an input:
 
@@ -125,7 +125,7 @@ print('Do Y1 and Y2 match?', torch.allclose(Y1, Y2))
 ```
 
 
-### Finally, Sequential Causal Attention with Constant Cost per Token
+### Finally, Sequential Causal Softmax Attention with Constant Cost per Token
 
 We now sequentialize the computation by caching our attention mechanism's latent state, which has a constant size, enabling us to apply attention over a stream of tokens that arrive in chunks, with constant time and space complexity per token:
 
@@ -214,7 +214,7 @@ $$\begin{aligned}
 
 where $\text{LSE}$ is shorthand for "Logarithm of a Sum of Exponentials."
 
-Armed with this insight, we prove that our attention mechanism is expressible as a composition of log-sums of exponentials that is linearizable, with a latent space of constant size, enabling sequential application with constant time and space complexity per token. For details, please see our paper.
+Armed with this insight, we prove that our Softmax attention mechanism is expressible as a composition of log-sums of exponentials that is linearizable, with a latent space of constant size, enabling sequential application with constant time and space complexity per token. For details, please see our paper.
 
 
 ## Frequently Asked Questions
@@ -232,7 +232,7 @@ It might be possible to replace $\exp$ and $\log$ with two functions that are no
 
 *Q: "Is this method a special case of ``linear attention'' as proposed by [Katharopoulos et al (2020)](https://arxiv.org/abs/2006.16236)?"*
 
-A: Yes. Initially we thought otherwise, but we were wrong! See shaochenze's comment [here](https://github.com/glassroom/heinsen_attention/issues/1).
+A: Yes, the quadratic-cost formulation is expressible as a special case of linear attention. Initially we thought otherwise, but we were wrong! See shaochenze's comment [here](https://github.com/glassroom/heinsen_attention/issues/1).
 
 
 ## Installation and Usage
@@ -244,7 +244,7 @@ The only dependency is a recent version of PyTorch.
 
 ### Usage
 
-Our implementation returns _the logarithm of attention_, which by construction is in the same space as `log_V`. In practice, we have found that using the logarithm of our attention mechanism as input to subsequent model components works well!
+Our implementation returns _the logarithm of Softmax attention_, which by construction is in the same space as `log_V`. In practice, we have found that using the logarithm of our attention mechanism as input to subsequent model components works well!
 
 ```python
 # Load PyTorch module:
