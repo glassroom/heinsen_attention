@@ -13,6 +13,8 @@ where $c$ is a scaling constant. With this simple modification, attention become
 
 * [How Does it Work?](#how-does-it-work)
 
+* [Frequently Asked Questions](#frequently-asked-questions)
+
 * [Installation and Usage](#installation-and-usage)
 
 * [Replicating Published Results](#replicating-published-results)
@@ -214,7 +216,7 @@ where $\text{LSE}$ is shorthand for "Logarithm of a Sum of Exponentials."
 
 Armed with this insight, we prove that our attention mechanism is expressible as a composition of log-sums of exponentials that is linearizable, with a latent space of constant size, enabling sequential application with constant time and space complexity per token. For details, please see our paper.
 
-    
+
 ## Installation and Usage
 
 Download or copy a single file to your project directory: [heinsen_attention.py](heinsen_attention.py).
@@ -249,6 +251,20 @@ Our implementation is a _proof of concept_. For simplicity and expediency, we li
 2. When computing autoregressive attention in parallel over all tokens in a sequence, we first compute all latent states with two parallel scans (`logcumsumexp`'s), keeping all latent states simultaneously in memory as intermediate values, and then reduce them, which is memory-inefficient but easier to write than a memory-efficient implementation. In practice, this impacts the amount of memory required for training.
 
 Neither limitation is intrinsic to our attention mechanism. Both can be resolved with code.
+
+
+## Frequently Asked Questions
+
+*Q: "Can this be generalized to functions other than $\exp(\cdot)$ and $\log(\cdot)$?"*
+
+A: Yes, _obviously_. If we define $\phi = \exp$, we have:
+
+$$\overset{\text{modified}}{\text{Attention}}(Q, K, V) := \displaystyle \text{Softmax}\left( \phi^{-1} \left( \frac{\phi(Q) \phi(K)^T}{\exp(c)} \right) \right) V.$$
+
+
+*Q: "Is this method a special case of ``linear attention'' as proposed by [Katharopoulos et al (2020)](https://arxiv.org/abs/2006.16236)?"*
+
+A: No. Previous attempst to linearize attention, including the method proposed by Katharopoulos et al, do _not_ apply the inverse of the kernel function to the matrix product and do _not_ apply the Softmax function to the logits. We cite the work by Katharopoulos et al in our paper.
 
 
 ## Replicating Published Results
