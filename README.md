@@ -264,7 +264,7 @@ $$\overset{\text{modified}}{\text{Attention}}(Q, K, V) := \displaystyle \text{So
 
 *Q: "Is this method a special case of ``linear attention'' as proposed by [Katharopoulos et al (2020)](https://arxiv.org/abs/2006.16236)?"*
 
-A: No. Previous attempst to linearize attention, including the method proposed by Katharopoulos et al, do _not_ apply the inverse of the kernel function to the matrix product and do _not_ apply the Softmax function to the logits. We cite the work by Katharopoulos et al in our paper.
+A: No. As far as we know, all previous attempts to linearize attention, including the method proposed by Katharopoulos et al, do _not_ apply the inverse of the kernel function to the matrix product and do _not_ apply the Softmax function to the logits. We cite the work by Katharopoulos et al in our paper.
 
 
 ## Replicating Published Results
