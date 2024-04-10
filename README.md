@@ -232,7 +232,7 @@ It might be possible to replace $\exp$ and $\log$ with two functions that are no
 
 *Q: "Is this method a special case of ``linear attention'' as proposed by [Katharopoulos et al (2020)](https://arxiv.org/abs/2006.16236)?"*
 
-A: No. As far as we know, all previous attempts to linearize attention, including the method proposed by Katharopoulos et al, (a) do _not_ apply a function to map the kernelized matrix product to logits, and (b) do _not_ apply a Softmax function to the logits. We cite the work by Katharopoulos et al in our paper.
+A: Yes. Initially we thought otherwise, but we were wrong! See shaochenze's comment [here](https://github.com/glassroom/heinsen_attention/issues/1).
 
 
 ## Installation and Usage
