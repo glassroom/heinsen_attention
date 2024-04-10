@@ -1,6 +1,6 @@
 # heinsen_attention
 
-Reference implementation of "[Softmax Attention with Constant Cost per Token](assets/preprint.pdf)" (Heinsen, 2024), (arXiv link pending).
+Reference implementation of "[Softmax Attention with Constant Cost per Token](http://arxiv.org/abs/2404.05843)" (Heinsen, 2024).
 
 We propose a simple modification to the conventional attention mechanism applied by Transformers: Instead of quantifying pairwise query-key similarity with scaled dot-products, we quantify it with the logarithms of scaled dot-products of exponentials:
 
@@ -279,13 +279,14 @@ We have tested the code in this repository only on Ubuntu Linux 22.04 with Pytho
 
 ## Citing
 
-Until our arXiv link goes live, please cite our work as follows:
-
 ```
-@misc{heinsen2024attention,
-    title={Softmax Attention with Constant Cost per Token},
-    author={Franz A. Heinsen},
-    year={2024},
+@misc{heinsen2024softmax,
+      title={Softmax Attention with Constant Cost per Token}, 
+      author={Franz A. Heinsen},
+      year={2024},
+      eprint={2404.05843},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
 }
 ```
 
