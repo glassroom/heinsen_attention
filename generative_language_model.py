@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from tqdm import tqdm
 from dataclasses import dataclass
 from heinsen_attention import LogAttention
 
