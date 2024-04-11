@@ -17,6 +17,8 @@ where $c$ is a scaling constant. With this simple modification, Softmax attentio
 
 * [Installation and Usage](#installation-and-usage)
 
+* [Important Limitations](#important-limitations) (Make sure to read them!)
+
 * [Replicating Published Results](#replicating-published-results)
 
 * [Notes](#notes)
@@ -235,6 +237,11 @@ It might be possible to replace $\exp$ and $\log$ with two functions that are no
 A: Yes, the quadratic-cost formulation is expressible as a special case of linear attention. Initially we thought otherwise, but we were wrong! See shaochenze's comment [here](https://github.com/glassroom/heinsen_attention/issues/1).
 
 
+*Q: "How can I help?"
+
+A: Glad you asked! Write code that addresses the two [self-imposed limitations](#important-limitations) of our implementation with efficiency and numerical stability. Implement our method in other software frameworks (e.g., JAX, TensorFlow) and languages (e.g., Julia, Mojo).
+
+
 ## Installation and Usage
 
 Download or copy a single file to your project directory: [heinsen_attention.py](heinsen_attention.py).
@@ -260,7 +267,7 @@ log_Y = log_attn(Q, K, log_V)  # in practice, we can use log_Y
 If for some reason you need attention in the same space as `V`, exponentiate `log_Y`.
 
 
-### Important Limitations
+## Important Limitations
 
 Our implementation is a _proof of concept_. For simplicity and expediency, we limit it in two significant ways:
 
