@@ -237,7 +237,7 @@ It might be possible to replace $\exp$ and $\log$ with two functions that are no
 A: Yes, the quadratic-cost formulation is expressible as a special case of linear attention. Initially we thought otherwise, but we were wrong! See shaochenze's comment [here](https://github.com/glassroom/heinsen_attention/issues/1).
 
 
-*Q: "How can I help?"
+*Q: "How can I help?"*
 
 A: Glad you asked! Write code that addresses the two [self-imposed limitations](#important-limitations) of our implementation with efficiency and numerical stability. Implement our method in other software frameworks (e.g., JAX, TensorFlow) and languages (e.g., Julia, Mojo).
 
