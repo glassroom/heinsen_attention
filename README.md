@@ -246,7 +246,7 @@ A: Glad you asked! Write code that addresses the two [self-imposed limitations](
 
 Download or copy a single file to your project directory: [heinsen_attention.py](heinsen_attention.py).
 
-The only dependency is a recent version of PyTorch.
+The only dependencies are a recent version of [PyTorch](https://pytorch.org/) and [tqdm](https://tqdm.github.io/) (for displaying a token-generation progress bar in our sample generative language model).
 
 
 ### Usage
