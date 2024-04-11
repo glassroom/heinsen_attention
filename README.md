@@ -246,7 +246,7 @@ A: Glad you asked! Write code that addresses the two [self-imposed limitations](
 
 Download or copy a single file to your project directory: [heinsen_attention.py](heinsen_attention.py).
 
-The only dependencies are a recent version of [PyTorch](https://pytorch.org/) and [tqdm](https://tqdm.github.io/) (for displaying a token-generation progress bar in our sample generative language model).
+The only dependency is a recent version of [PyTorch](https://pytorch.org/).
 
 
 ### Usage
@@ -280,7 +280,9 @@ Neither limitation is intrinsic to our attention mechanism. Both can be resolved
 
 ## Replicating Published Results
 
-The generative language model we use in our experiments is defined [here](generative_language_model.py). Build the model with:
+The generative language model we use in our experiments is defined [here](generative_language_model.py). The only additional requirement is [tqdm](https://tqdm.github.io/), for displaying a progress bar when generating tokens.
+
+Build the model with:
 
 ```python
 from generative_language_model import build_model
@@ -298,7 +300,7 @@ For tokenization, we use [tiktoken](https://github.com/openai/tiktoken) with the
 
 For training hardware, we would recommend at least an 8XA100 40GB.
 
-    
+
 ## Notes
 
 We have tested the code in this repository only on Ubuntu Linux 22.04 with Python 3.10+.
