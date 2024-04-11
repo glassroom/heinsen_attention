@@ -17,7 +17,7 @@ where $c$ is a scaling constant. With this simple modification, Softmax attentio
 
 * [Installation and Usage](#installation-and-usage)
 
-* [Important Limitations](#important-limitations) (Make sure to read them!)
+* [Important Limitations](#important-limitations) <-- make sure to read them!
 
 * [Replicating Published Results](#replicating-published-results)
 
