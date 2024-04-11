@@ -239,7 +239,7 @@ A: Yes, the quadratic-cost formulation is expressible as a special case of linea
 
 *Q: "How can I help?"*
 
-A: Glad you asked! The most helpful thing anyone could do is write code that addresses the two [self-imposed limitations](#important-limitations) of our implementation with efficiency and numerical stability in PyTorch. The second most helpful thing is test our method on more tasks with larger models. Another thing that would be helpful is implementing our method in other software frameworks (e.g., JAX, TensorFlow) and languages (e.g., Julia, Mojo).
+A: Glad you asked! The most helpful thing anyone could do is write code that addresses the two [self-imposed limitations](#important-limitations) of our implementation with efficiency and numerical stability in PyTorch. Another thing that would be helpful is implementing our method in other software frameworks (e.g., JAX, TensorFlow) and languages (e.g., Julia, Mojo) that might could make it easier to address both limitations. Finally, our method has yet to be tested on a diverse set of tasks with larger models.
 
 
 ## Installation and Usage
