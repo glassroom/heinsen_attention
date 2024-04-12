@@ -28,7 +28,7 @@ where $c$ is a scaling constant. With this simple modification, Softmax attentio
 
 ## How Does it Work?
 
-It's best to _see it in action_ with a toy example. First, we will show how to compute causal (autoregressive) Softmax attention with our modification using the familiar quadratic-cost formulation. Then, we will show how to linearize computation, obtaining the same results. Finally, we will split the sequence in chunks and compute attention sequentially, chunk by chunk, incurring constant cost per token, again obtaining the same results. 
+It's best to _see it in action_ with a toy example. First, we will show how to compute causal (autoregressive) Softmax attention with our modification using the familiar quadratic-cost formulation. Then, we will show how we linearize computation, obtaining the same results. Finally, we will split the sequence in chunks and compute attention sequentially, chunk by chunk, incurring constant cost per token, again obtaining the same results. 
 
 
 ### Our Toy Example
@@ -91,7 +91,7 @@ print(Y1)
 
 ### Second, Linearized Causal Softmax Attention
 
-Here is a PyTorch module that computes the same output, using a linearized formulation. Note that the module accepts `log_V` instead of `V` as an input:
+Here is a PyTorch module that computes the same output, using a linearized formulation that consists _entirely of log-sums of exponentials_. Note that the module accepts `log_V` instead of `V` as an input:
 
 ```python
 class LinearizedCausalAttention(nn.Module):
@@ -227,14 +227,14 @@ A: Yes, obviously. If we define $\phi = \exp$, we have:
 
 $$\overset{\text{modified}}{\text{Attention}}(Q, K, V) := \displaystyle \text{Softmax}\left( \phi^{-1} \left( \frac{\phi(Q) \phi(K)^T}{\phi(c)} \right) \right) V.$$
 
-The question is whether there are other functions $\phi$ that are not $\exp$ (and do not exponentiate) which (a) are invertible, and (b) enable linearization of the Softmax function. We suspect the answer is no.
+The question is whether there are other functions $\phi$ that are not $\exp$ (and do not exponentiate) which (a) are invertible, and (b) enable linearization of the Softmax function as a composition of (log-) sums. We suspect the answer is no.
 
-It might be possible to replace $\exp$ and $\log$ with two functions that are not each other's inverses and together enable linearization of the Softmax function, but the result might not be... as elegant.
+It might be possible to replace $\exp$ and $\log$ with two functions that are not each other's inverses and together enable linearization of the Softmax function as a composition of sums, but the result might not be... as elegant.
 
 
 *Q: "Is this method a special case of ``linear attention'' as proposed by [Katharopoulos et al (2020)](https://arxiv.org/abs/2006.16236)?"*
 
-A: Yes, the quadratic-cost formulation is expressible as a special case of linear attention. Initially we thought otherwise, but we were wrong! See shaochenze's comment [here](https://github.com/glassroom/heinsen_attention/issues/1).
+A: Yes. The quadratic-cost formulation is easily expressible as a special case of linear attention. Initially we thought otherwise, but we were wrong! In hindsight, we're a bit embarrassed that we didn't see it right away. Maybe our gray matter was temporarily stuck on subpar local optima? Please see shaochenze's comment [here](https://github.com/glassroom/heinsen_attention/issues/1). 
 
 
 *Q: "How can I help?"*
