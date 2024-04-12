@@ -28,7 +28,7 @@ where $c$ is a scaling constant. With this simple modification, Softmax attentio
 
 ## How Does it Work?
 
-It's best to _see it in action_ with a toy example. First, we will show how to compute causal (autoregressive) Softmax attention with our modification using the familiar quadratic-cost formulation. Then, we will show how we linearize computation, obtaining the same results. Finally, we will split the sequence in chunks and compute attention sequentially, chunk by chunk, incurring constant cost per token, again obtaining the same results. 
+It's best to _see it in action_ with a toy example. First, we will show how to compute causal (autoregressive) Softmax attention with our modification using the familiar quadratic-cost formulation. Then, we will show how we linearize computation as a composition of log-sums of exponentials, obtaining the same results. Finally, we will split the sequence in chunks and compute attention sequentially, chunk by chunk, incurring constant cost per token, again obtaining the same results. 
 
 
 ### Our Toy Example
