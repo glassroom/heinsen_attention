@@ -227,14 +227,12 @@ A: Yes, obviously. If we define $\phi = \exp$, we have:
 
 $$\overset{\text{modified}}{\text{Attention}}(Q, K, V) := \displaystyle \text{Softmax}\left( \phi^{-1} \left( \frac{\phi(Q) \phi(K)^T}{\phi(c)} \right) \right) V.$$
 
-The question is whether there are other functions $\phi$ that are not $\exp$ (and do not exponentiate) which (a) are invertible, and (b) enable linearization of the Softmax function as a composition of (log-) sums. We suspect the answer is no.
-
-It might be possible to replace $\exp$ and $\log$ with two functions that are not each other's inverses and together enable linearization of the Softmax function as a composition of sums, but the result might not be... as elegant.
+The question is whether there are other functions $\phi$ that are not $\exp$ (and do not exponentiate) which (a) are invertible, and (b) enable linearization of the Softmax function as a composition of (log-) sums. We suspect the answer is no. It might be possible to replace $\exp$ and $\log$ with two functions that are not each other's inverses and together enable linearization of the Softmax function as a composition of sums, but the result might not work as well or be... as elegant.
 
 
 *Q: "Is this method a special case of ``linear attention'' as proposed by [Katharopoulos et al (2020)](https://arxiv.org/abs/2006.16236)?"*
 
-A: Yes. The quadratic-cost formulation is easily expressible as a special case of linear attention. Initially we thought otherwise, but we were wrong! In hindsight, we're a bit embarrassed that we didn't see it right away. Maybe our gray matter was temporarily stuck on subpar local optima? Please see shaochenze's comment [here](https://github.com/glassroom/heinsen_attention/issues/1). 
+A: Yes. The quadratic-cost formulation is easily expressible as a special case of linear attention. Initially we thought otherwise, but we were wrong! In hindsight, we're a bit embarrassed that we didn't see it right away. Maybe our gray matter was temporarily stuck on subpar local optima? Please see shaochenze's comment [here](https://github.com/glassroom/heinsen_attention/issues/1). That said, this special case enables _linearization consisting entirely of log-sums of exponentials_.
 
 
 *Q: "How can I help?"*
