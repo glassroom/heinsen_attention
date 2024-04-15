@@ -232,9 +232,9 @@ The question is whether there are other functions $\phi$ that are not $\exp$ (an
 
 *Q: "Is this method a special case of ``linear attention'' as proposed by [Katharopoulos et al (2020)](https://arxiv.org/abs/2006.16236)?"*
 
-A: Yes. The quadratic-cost formulation is easily expressible as a special case of linear attention that normalizes the matrix multiplication of exponentiated queries and keys, _i.e._, a _joint Softmax function over dot-products of exponentials_:
+A: Yes. The quadratic-cost formulation is easily expressible as a special case of linear attention that normalizes the matrix multiplication of exponentiated queries and keys, giving us a _joint Softmax function over dot-products of exponentials_:
 
-$$\text{Softmax}\left( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} \right) V = \frac{\exp(Q) \exp(K)^T}{\sum_{[n_K]} \exp(Q) \exp(K)^T},$$
+$$\text{Softmax}\left( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} \right) V = \begin{bmatrix} \frac{\exp(Q) \exp(K)^T}{\sum_{[n_K]} \exp(Q) \exp(K)^T} \end{bmatrix} V,$$
 
 where $\sum_{[n_K]}$ sums over the dimension indexed by the number of keys. It turns out this special case is expressible _entirely as a composition of log-sums of exponentials_. Initially, we didn't realize our modification was a special case of linear attention. In hindsight, we're a bit embarrassed that we didn't see it right away. Maybe our gray matter was temporarily stuck on subpar local optima? Please see shaochenze's comment [here](https://github.com/glassroom/heinsen_attention/issues/1).
 
