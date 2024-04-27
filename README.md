@@ -6,7 +6,7 @@ We propose a simple modification to the conventional Softmax attention mechanism
 
 $$\overset{\text{modified}}{\text{Attention}}(Q, K, V) := \displaystyle \text{Softmax}\left( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} \right) V,$$
 
-where $c$ is a scaling constant. With this simple modification, Softmax attention becomes expressible as a composition of log-sums of exponentials that is linearizable, with a latent space of constant size, enabling sequential application with constant time and space complexity per token.
+where $c$ is a scaling constant. This simple modification linearizes attention with exponential kernel feature maps, whose corresponding feature function is infinite dimensional, and makes attention expressible as a composition of log-sums of exponentials, with a latent space of constant size, enabling application with constant time and space complexity per token.
 
 
 ## Table of Contents
