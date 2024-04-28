@@ -6,7 +6,7 @@ We propose a simple modification to the conventional Softmax attention mechanism
 
 $$\overset{\text{modified}}{\text{Attention}}(Q, K, V) := \displaystyle \text{Softmax}\left( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} \right) V,$$
 
-where $c$ is a scaling constant. This simple modification linearizes attention with exponential kernel feature maps and makes it expressible as a composition of log-sums of exponentials, with a latent space of constant size, enabling application with constant time and space complexity per token.
+where $c$ is a scaling constant. This simple modification [linearizes attention](https://arxiv.org/abs/2006.16236) with exponential kernel feature maps and makes it expressible as a composition of log-sums of exponentials, with a latent space of constant size, enabling application with constant time and space complexity per token.
 
 Note that the feature function corresponding to an exponential kernel is infinite dimensional.
 
@@ -223,24 +223,38 @@ Armed with this insight, we prove that our Softmax attention mechanism is expres
 
 ## Frequently Asked Questions
 
+*Q: "Is this method a special case of ``linear attention'' as proposed by [Katharopoulos et al (2020)](https://arxiv.org/abs/2006.16236)?"*
+
+A: Yes. The quadratic-cost formulation is expressible as a special case of linear attention. It's the special case that applies exponential kernel feature maps, whose corresponding feature function is infinite dimensional:
+
+$$\text{Softmax}\left( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} \right) V = \begin{bmatrix} \displaystyle \frac{\exp(Q) \exp(K)^T}{\sum_{[n_K]} \exp(Q) \exp(K)^T} \end{bmatrix} V,$$
+
+where $\sum_{[n_K]}$ sums over the dimension indexed by the number of keys. Expressed in code:
+
+```python
+class NumericallyUnstableCausalAttention(nn.Module):
+
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, Q, K, V):
+        exp_sims = Q.exp() @ K.exp().transpose(-2, -1)                          # [n_tok, n_tok]
+        mask = exp_sims.new_ones(exp_sims.shape[-2:], dtype=torch.bool).tril()  # [n_tok, n_tok]
+        exp_sims = exp_sims.masked_fill(mask.logical_not(), 0.0)                # [n_tok, n_tok]
+        Y = (exp_sims / exp_sims.sum(dim=-1, keepdim=True)) @ V                 # [n_tok, d_val]
+        return Y
+```
+
+It turns out this special case is expressible _entirely as a composition of log-sums of exponentials_. Initially, we didn't realize our modification was a special case of linear attention. In hindsight, we're a bit embarrassed that we didn't see it right away. Maybe our gray matter was temporarily stuck on subpar local optima? Please see shaochenze's comment [here](https://github.com/glassroom/heinsen_attention/issues/1).
+
+
 *Q: "Can this be generalized to functions other than _exp()_ and _log()_?"*
 
-A: Yes, obviously. If we define $\phi = \exp$, we have:
+A: Yes. If we define $\phi = \exp$, we have:
 
 $$\overset{\text{modified}}{\text{Attention}}(Q, K, V) := \displaystyle \text{Softmax}\left( \phi^{-1} \left( \frac{\phi(Q) \phi(K)^T}{\phi(c)} \right) \right) V.$$
 
 The question is whether there are other functions $\phi$ that are not $\exp$ (and do not exponentiate) which (a) are invertible, and (b) enable linearization of the Softmax function as a composition of (log-) sums. We suspect the answer is no. It might be possible to replace $\exp$ and $\log$ with two functions that are not each other's inverses and together enable linearization of the Softmax function as a composition of sums, but the result might not work as well or be... as elegant.
-
-
-*Q: "Is this method a special case of ``linear attention'' as proposed by [Katharopoulos et al (2020)](https://arxiv.org/abs/2006.16236)?"*
-
-A: Yes. The quadratic-cost formulation is expressible as a special case of linear attention. It's the special case that applies exponential kernel feature maps:
-
-$$\text{Softmax}\left( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} \right) V = \begin{bmatrix} \displaystyle \frac{\exp(Q) \exp(K)^T}{\sum_{[n_K]} \exp(Q) \exp(K)^T} \end{bmatrix} V,$$
-
-where $\sum_{[n_K]}$ sums over the dimension indexed by the number of keys. It turns out this special case is expressible _entirely as a composition of log-sums of exponentials_. Initially, we didn't realize our modification was a special case of linear attention. In hindsight, we're a bit embarrassed that we didn't see it right away. Maybe our gray matter was temporarily stuck on subpar local optima? Please see shaochenze's comment [here](https://github.com/glassroom/heinsen_attention/issues/1).
-
-Note that the feature function corresponding to an exponential kernel is infinite dimensional.
 
 
 *Q: "How can I help?"*
