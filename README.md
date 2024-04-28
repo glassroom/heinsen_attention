@@ -245,7 +245,9 @@ class NumericallyUnstableCausalAttention(nn.Module):
         return Y
 ```
 
-It turns out this special case is expressible _entirely as a composition of log-sums of exponentials_. Initially, we didn't realize our modification was a special case of linear attention. In hindsight, we're a bit embarrassed that we didn't see it right away. Maybe our gray matter was temporarily stuck on subpar local optima? Please see shaochenze's comment [here](https://github.com/glassroom/heinsen_attention/issues/1).
+It turns out this special case is expressible _entirely as a composition of log-sums of exponentials_.
+
+Initially, we didn't realize our modification was a special case of linear attention. In hindsight, we're a bit embarrassed that we didn't see it right away. Maybe our gray matter was temporarily stuck on subpar local optima? Please see shaochenze's comment [here](https://github.com/glassroom/heinsen_attention/issues/1).
 
 
 *Q: "Can this be generalized to functions other than _exp()_ and _log()_?"*
