@@ -229,7 +229,7 @@ A: Yes. The quadratic-cost formulation is expressible as a special case of linea
 
 $$\text{Softmax}\left( \log \frac{\exp(Q) \exp(K)^T}{\exp(c)} \right) V = \begin{bmatrix} \displaystyle \frac{\exp(Q) \exp(K)^T}{\sum_{[n_K]} \exp(Q) \exp(K)^T} \end{bmatrix} V,$$
 
-where $\sum_{[n_K]}$ sums over the dimension indexed by the number of keys. The gram matrix for $K(x, y) := \exp(x)\exp(y)$ is symmetric and positive semi-definite, so $K$ is a kernel (Mercer's theorem).
+where $\sum_{[n_K]}$ sums over the dimension indexed by the number of keys. The gram matrix for $K(x, y) := \sum \exp(x)\exp(y)$ is symmetric and positive semi-definite, so $K$ is a kernel (Mercer's theorem).
 
 Expressed in code:
 
