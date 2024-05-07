@@ -273,7 +273,7 @@ The only dependency is a recent version of [PyTorch](https://pytorch.org/).
 
 ### Usage
 
-Our implementation returns _the logarithm of Softmax attention_, which by construction is in the same space as `log_V`. In practice, we have found that using the logarithm of our attention mechanism as input to subsequent model components works well!
+Our implementation returns _the logarithm of Softmax attention_, which is in the same space as `log_V`. In practice, we have found that computing `log_V` directly from token states and using the logarithm of our attention mechanism as input to subsequent model components works well!
 
 ```python
 # Load PyTorch module:
@@ -286,18 +286,20 @@ log_attn = LogAttention(is_causal=True)
 log_Y = log_attn(Q, K, log_V)  # in practice, we can use log_Y
 ```
 
+For a concrete example, see the generative language model we use in our experiments, defined [here](generative_language_model.py).
+
 If for some reason you need attention in the same space as `V`, exponentiate `log_Y`.
 
 
 ## Important Limitations
 
-Our implementation is a _proof of concept_. For simplicity and expediency, we limit it in two significant ways:
+For simplicity and expediency, we limit our implementation in two significant ways:
 
-1. As in our toy example, we restrict the values $V$ to positive numbers, to avoid dealing with complex floating-point numbers, which incur greater overhead and presently are more cumbersome to manipulate than real floating-point numbers. In practice, we have found this isn't an issue: We work with the logarithm of attention, which is in the same space as $\log V$.
+1. We restrict the values $V$ to positive numbers to avoid dealing with complex floating-point numbers, which incur greater overhead and presently are more cumbersome to manipulate than real floating-point numbers. In practice, we have found this isn't an issue: We work with the logarithm of attention, which is in the same space as $\log V$. For a concrete example, see the generative language model we use in our experiments, defined [here](generative_language_model.py).
 
 2. When computing autoregressive attention in parallel over all tokens in a sequence, we first compute all latent states with two parallel scans (`logcumsumexp`'s), keeping all latent states simultaneously in memory as intermediate values, and then reduce them, which is memory-inefficient but easier to write than a memory-efficient implementation. In practice, this impacts the amount of memory required for training.
 
-Neither limitation is intrinsic to our attention mechanism. Both can be resolved with code.
+Neither limitation is intrinsic to our attention mechanism. Both can be addressed with code.
 
 
 ## Replicating Published Results
