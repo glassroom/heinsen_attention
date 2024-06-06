@@ -266,14 +266,18 @@ A: Glad you asked! The most helpful thing anyone could do is write code that add
 
 ## Installation and Usage
 
-Download or copy a single file to your project directory: [heinsen_attention.py](heinsen_attention.py).
+```
+pip install git+https://github.com/glassroom/heinsen_attention
+```
+
+Alternatively, you can download a single file to your project directory: [heinsen_attention.py](https://github.com/glassroom/heinsen_attention/blob/main/heinsen_attention/heinsen_attention.py).
 
 The only dependency is a recent version of [PyTorch](https://pytorch.org/).
 
 
 ### Usage
 
-Our implementation returns _the logarithm of Softmax attention_, which is in the same space as `log_V`. In practice, we have found that computing `log_V` directly from token states and using the logarithm of our attention mechanism as input to subsequent model components works well!
+Our implementation returns _the logarithm of Softmax attention_, which is a float tensor like `log_V`. In practice, we have found that computing `log_V` as a float tensor directly from token states and using the logarithm of our attention mechanism as input to subsequent model components works well!
 
 ```python
 # Load PyTorch module:
@@ -283,12 +287,16 @@ from heinsen_attention import LogAttention
 log_attn = LogAttention(is_causal=True)
 
 # Compute log(Attention(...)):
-log_Y = log_attn(Q, K, log_V)  # in practice, we can use log_Y
+log_Y = log_attn(Q, K, log_V)
+```
+
+To compute attention over additional tokens in the same sequence, pass `using_prev_context=True` to the module's forward pass:
+
+```
+log_Y = log_attn(Q, K, log_V, using_prev_context=True)
 ```
 
 For a concrete example of how we do this, see the residual layer of the generative language model we use in our experiments, defined in the file `generative_language_model.py`.
-
-If for some reason you need attention in the same space as `V`, exponentiate `log_Y`.
 
 
 ## Important Limitations
