@@ -292,7 +292,7 @@ log_Y = log_attn(Q, K, log_V)
 
 To compute attention over additional tokens in the same sequence, pass `using_prev_context=True` to the module's forward pass:
 
-```
+```python
 log_Y = log_attn(Q, K, log_V, using_prev_context=True)
 ```
 
